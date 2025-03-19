@@ -1,6 +1,6 @@
 # Using 3.12 because it's the latest version supported by Onionshare (python = ">=3.10,<3.13")
 # Using slim to simplify install of tor (Debian)
-ARG BASE_IMAGE=python:3.12-slim
+ARG BASE_IMAGE=docker.io/library/python:3.12-slim
 
 FROM ${BASE_IMAGE}
 

@@ -6,7 +6,7 @@ docker run \
    -v /volume2/docker/onionshare:/etc/onionshare \
    --name onionshare \
    # -u me:users \
-   -d tcyrus/onionshare:latest
+   -d ghcr.io/tcyrus/onionshare:main
 ```
 
 ## Notes
