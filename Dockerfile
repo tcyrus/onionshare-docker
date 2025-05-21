@@ -48,7 +48,8 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Switch to the non-privileged user to run the application.
 #USER appuser
 
-# See onionshare/onionshare#943
+# XDG_CONFIG_HOME needs to be set if the user doesn't have a homedir
+# in the docker image (onionshare/onionshare#943)
 ENV XDG_CONFIG_HOME="/tmp"
 
 ENTRYPOINT ["onionshare-cli"]

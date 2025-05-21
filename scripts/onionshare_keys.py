@@ -13,15 +13,17 @@ def pubkey_to_service_id(pubkey: bytes) -> str:
 
     See https://spec.torproject.org/rend-spec/encoding-onion-addresses.html
     """
+
     version = b"\x03"
     checksum = hashlib.sha3_256(b".onion checksum" + pubkey + version).digest()[:2]
     return base64.b32encode(pubkey + checksum + version).decode().lower()
 
 
-def get_keys_from_onionshare(config = {}) -> tuple[bytes, bytes]:
+def get_keys_from_config(config = {}) -> tuple[bytes, bytes]:
     """
     Extract onion v3 key files from onionshare config
     """
+
     service_id = config.get("general", {}).get("service_id", "")
     public_key = bytearray(b"== ed25519v1-public: type0 ==\x00\x00\x00")
     public_key.extend(base64.b32decode(service_id)[:-3])
@@ -33,7 +35,7 @@ def get_keys_from_onionshare(config = {}) -> tuple[bytes, bytes]:
     return (bytes(public_key), bytes(secret_key))
 
 
-def add_keys_to_onionshare(config = {}, public_key = b'', secret_key = b'') -> dict:
+def add_keys_to_config(config = {}, public_key = b'', secret_key = b'') -> dict:
     """
     Add onion v3 key files to onionshare config
     """
@@ -61,7 +63,7 @@ def main():
     # Get Keys from Config
     with open('onionshare.json', 'r') as f:
         config = json.load(f)
-    public_key, secret_key = get_keys_from_onionshare(config)
+    public_key, secret_key = get_keys_from_config(config)
     with open('hs_ed25519_secret_key', 'wb') as f:
         f.write(secret_key)
     with open('hs_ed25519_public_key', 'wb') as f:
@@ -74,9 +76,10 @@ def main():
     secret_key = b''
     with open('hs_ed25519_secret_key', 'rb') as f:
         secret_key = f.read().strip()
-    config = add_keys_to_onionshare(config, public_key, secret_key)
+    config = add_keys_to_config(config, public_key, secret_key)
     with open('onionshare.json', 'w') as f:
         json.dump(config, f, indent=2)
+
 
 if __name__ == "__main__":
     main()
